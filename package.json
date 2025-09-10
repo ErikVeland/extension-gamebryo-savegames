@@ -1,50 +1,25 @@
 {
   "name": "gamebryo-savegame-management",
-  "version": "0.1.3",
-  "description": "Management for gamebryo savegames",
-  "main": "./dist/index.js",
-  "repository": "",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "webpack": "node ./node_modules/webpack/bin/webpack --config webpack.config.js --progress --profile --color",
-    "clear": "rm-local-modules",
-    "copyfiles": "copyfiles -f ./node_modules/gamebryo-savegame/build/Release/GamebryoSave.node ./dist && copyfiles -f ./node_modules/gamebryo-savegame/dist/liblz4.dll ./dist && copyfiles -f ./node_modules/gamebryo-savegame/dist/zlib.dll ./dist && copyfiles -f src/stylesheets/savegame_management.scss dist",
-    "build": "npm run webpack && npm run copyfiles && extractInfo",
-    "installDev": "copyfiles -u 1 dist/**/* ../../out/bundledPlugins/gamebryo-savegame-management",
-    "buildDev": "npm run build && npm run installDev"
+    "build": "tsc -p .",
+    "webpack": "webpack --config webpack.config.js"
   },
-  "author": "Black Tree Gaming Ltd.",
+  "author": "",
   "license": "GPL-3.0",
-  "babel": {
-    "presets": [
-      "es2015"
-    ]
-  },
   "devDependencies": {
-    "@types/immutability-helper": "^2.6.3",
-    "@types/react": "16.0.34",
-    "@types/react-bootstrap": "^0.0.37",
-    "@types/react-dom": "16.0.3",
-    "@types/react-redux": "4.4.35",
-    "@types/react-router": "^2.0.41",
-    "@types/redux": "3.6.0",
-    "@types/redux-thunk": "2.1.0",
-    "babel-loader": "^7.1.4",
-    "babel-polyfill": "^6.13.0",
-    "bluebird": "^3.4.6",
-    "copyfiles": "^2.1.1",
-    "gamebryo-savegame": "Nexus-Mods/node-gamebryo-savegames",
-    "i18next": "^15.0.9",
-    "immutability-helper": "^2.8.1",
-    "json-loader": "^0.5.4",
-    "prop-types": "^15.6.1",
-    "redux": "3.7.2",
-    "redux-act": "^1.7.3",
-    "rm-local-modules": "^0.0.2",
-    "ts-loader": "^9.4.2",
-    "turbowalk": "Nexus-Mods/node-turbowalk",
-    "vortex-api": "Nexus-Mods/vortex-api",
-    "vortex-parse-ini": "Nexus-Mods/vortex-parse-ini",
+    "@types/node": "^18.0.0",
+    "typescript": "^4.4.3",
     "webpack": "^5.76.0",
-    "webpack-cli": "^5.0.1"
+    "webpack-cli": "^4.8.0"
+  },
+  "dependencies": {
+    "node-addon-api": "^8.5.0",
+    "node-gyp": "^11.4.2"
+  },
+  "optionalDependencies": {
+    "gamebryo-savegame": "file:node_modules/node-gamebryo-savegames"
   }
 }

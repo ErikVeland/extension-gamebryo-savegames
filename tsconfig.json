@@ -11,13 +11,18 @@
     "jsx": "react",
     "sourceMap": true,
     "skipLibCheck": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": [
+      "./typings.custom",
+      "./node_modules/@types"
+    ]
   },
     "exclude": [
       "node_modules"
     ],
   "files": [
     "typings.custom/index.d.ts",
+    "typings.custom/gamebryo-savegame.d.ts",
     "src/index.ts"
   ]
 }

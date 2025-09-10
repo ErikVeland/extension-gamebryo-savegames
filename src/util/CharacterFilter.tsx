@@ -53,8 +53,7 @@ function mapStateToProps(state: any): IConnectedProps {
   };
 }
 
-const FilterConn = connect(mapStateToProps)(
-  CharacterFilterComponent) as React.ComponentClass<types.IFilterProps & IExtraProps>;
+const FilterConn = connect(mapStateToProps)(CharacterFilterComponent);
 
 class CharacterFilter implements types.ITableFilter {
   public component: React.ComponentType<types.IFilterProps & IExtraProps>;
@@ -64,7 +63,7 @@ class CharacterFilter implements types.ITableFilter {
   constructor(getSGList: SGListCB) {
     this.mGetSGList = getSGList;
     this.component = (props: types.IFilterProps) =>
-      <FilterConn {...props} getSGList={this.mGetSGList}/>;
+      <FilterConn {...props as any} getSGList={this.mGetSGList}/>;
   }
 
   public matches(filter: any, value: any): boolean {
