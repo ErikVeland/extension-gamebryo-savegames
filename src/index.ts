@@ -68,19 +68,19 @@ function updateSaves(store: Redux.Store<any>,
       newSavegames.push(save);
     }
   }, true)
-  .then(({ failedReads, truncated }) => Promise.resolve({ newSavegames, failedReads, truncated }))
-  .then((result: { newSavegames: ISavegame[], failedReads: string[], truncated: boolean }) => {
-    const savesDict: { [id: string]: ISavegame } = {};
-    result.newSavegames.forEach((save: ISavegame) => { savesDict[save.id] = save; });
+    .then(({ failedReads, truncated }) => Promise.resolve({ newSavegames, failedReads, truncated }))
+    .then((result: { newSavegames: ISavegame[], failedReads: string[], truncated: boolean }) => {
+      const savesDict: { [id: string]: ISavegame } = {};
+      result.newSavegames.forEach((save: ISavegame) => { savesDict[save.id] = save; });
 
-    const state = store.getState();
-    const oldSaves: { [id: string]: ISavegame } = state.session.saves.saves;
+      const state = store.getState();
+      const oldSaves: { [id: string]: ISavegame } = state.session.saves.saves;
 
-    if (!saveDictEqual(oldSaves, savesDict)) {
-      store.dispatch(setSavegames(savesDict, result.truncated));
-    }
-    return Promise.resolve(result.failedReads);
-  });
+      if (!saveDictEqual(oldSaves, savesDict)) {
+        store.dispatch(setSavegames(savesDict, result.truncated));
+      }
+      return Promise.resolve(result.failedReads);
+    });
 }
 
 function genUpdateSavegameHandler(api: types.IExtensionApi) {
@@ -211,13 +211,13 @@ function once(context: types.IExtensionContext, update: util.Debouncer) {
   const store: Redux.Store<any> = context.api.store;
 
   context.api.setStylesheet('savegame-management',
-    path.join(__dirname, 'savegame_management.scss'));
+                            path.join(__dirname, 'savegame_management.scss'));
 
   context.api.onStateChange(['persistent', 'profiles'],
-    (oldProfiles: { [profileId: string]: types.IProfile },
-     newProfiles: { [profileId: string]: types.IProfile }) => {
-       onProfilesModified(store, update, oldProfiles, newProfiles);
-    });
+                            (oldProfiles: { [profileId: string]: types.IProfile },
+                             newProfiles: { [profileId: string]: types.IProfile }) => {
+                              onProfilesModified(store, update, oldProfiles, newProfiles);
+                            });
 
   context.api.onStateChange(
     ['settings', 'gameMode', 'discovered'], (previous, current) => {
@@ -225,18 +225,18 @@ function once(context: types.IExtensionContext, update: util.Debouncer) {
     });
 
   context.api.onAsync('apply-settings',
-    (prof: types.IProfile, filePath: string, ini: IniFile<any>) => {
-      log('debug', 'apply savegame settings', { gameId: prof.gameId, filePath });
-      if (gameSupported(prof.gameId)
+                      (prof: types.IProfile, filePath: string, ini: IniFile<any>) => {
+                        log('debug', 'apply savegame settings', { gameId: prof.gameId, filePath });
+                        if (gameSupported(prof.gameId)
         && (filePath.toLowerCase() === iniPath(prof.gameId).toLowerCase())) {
-        applySaveSettings(context.api, prof, ini);
-        store.dispatch(clearSavegames());
-        const savePath = profileSavePath(prof);
-        const savesPath = path.join(mygamesPath(prof.gameId), savePath);
-        update.schedule(undefined, prof.id, savesPath);
-      }
-      return Promise.resolve(undefined);
-    });
+                          applySaveSettings(context.api, prof, ini);
+                          store.dispatch(clearSavegames());
+                          const savePath = profileSavePath(prof);
+                          const savesPath = path.join(mygamesPath(prof.gameId), savePath);
+                          update.schedule(undefined, prof.id, savesPath);
+                        }
+                        return Promise.resolve(undefined);
+                      });
 
   context.api.onAsync('did-remove-profile', (res: undefined, profile: types.IProfile) => {
     if (gameSupported(profile.gameId) && (profile.features?.['local_saves'] ?? false)) {
@@ -272,7 +272,7 @@ function once(context: types.IExtensionContext, update: util.Debouncer) {
     } else {
       return Promise.resolve();
     }
-    });
+  });
 
   context.api.events.on('profile-did-change', (profileId: string) =>
     onProfileChange(context.api, profileId, update));
@@ -556,17 +556,17 @@ function init(context: IExtensionContextExt): boolean {
 
   context.registerAction('profile-actions', 100, 'open-ext', {},
                          'Open Save Games', (instanceIds: string[]) => {
-    openSavegamesDirectory(context.api, instanceIds[0]);
-  }, (instanceIds: string[]) => {
-    const state: types.IState = context.api.store.getState();
-    const profile = state.persistent.profiles[instanceIds[0]];
-    return gameSupported(profile.gameId);
-  });
+                           openSavegamesDirectory(context.api, instanceIds[0]);
+                         }, (instanceIds: string[]) => {
+                           const state: types.IState = context.api.store.getState();
+                           const profile = state.persistent.profiles[instanceIds[0]];
+                           return gameSupported(profile.gameId);
+                         });
 
   context.registerAction('savegames-icons', 150, 'open-ext', {},
                          'Open Save Games', () => {
-    openSavegamesDirectory(context.api);
-  });
+                           openSavegamesDirectory(context.api);
+                         });
 
   context.once(() => once(context, update));
 

@@ -3,10 +3,17 @@ import { ISavegame } from '../types/ISavegame';
 import { CORRUPTED_NAME, MAX_SAVEGAMES } from '../constants';
 
 import Promise from 'bluebird';
-import * as savegameLib from 'gamebryo-savegame';
 import * as path from 'path';
 import turbowalk, { IEntry } from 'turbowalk';
 import { fs } from 'vortex-api';
+
+// Conditional import for gamebryo-savegame (optional dependency)
+let savegameLib: any = null;
+try {
+  savegameLib = require('gamebryo-savegame');
+} catch (err) {
+  // Module not available, will handle gracefully
+}
 
 // TODO essentially disables cache clearing since we can as many screenshots as the max of
 // savegames we will display.
@@ -93,6 +100,28 @@ export function loadSaveGame(filePath: string, fileSize: number,
                              onAddSavegame: (save: ISavegame) => void,
                              full: boolean, tries: number = 2): Promise<void> {
   return new Promise<void>((resolve, reject) => {
+    // Check if savegameLib is available
+    if (!savegameLib) {
+      const id = path.basename(filePath);
+      onAddSavegame({
+        id,
+        filePath,
+        fileSize,
+        attributes: {
+          id: 0,
+          name: 'Unknown (gamebryo-savegame not available)',
+          location: 'N/A',
+          playTime: 'N/A',
+          level: 0,
+          filename: id,
+          plugins: [],
+          loadedTime: Date.now(),
+          corrupted: false,
+        },
+      });
+      return resolve();
+    }
+
     try {
       savegameLib.create(filePath, !full, (err, sg) => {
         const id = path.basename(filePath);

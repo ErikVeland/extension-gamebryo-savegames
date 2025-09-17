@@ -1,9 +1,14 @@
 import { ISavegame } from '../types/ISavegame';
 
-import { Dimensions } from 'gamebryo-savegame';
 import * as React from 'react';
 import { log } from 'vortex-api';
 import { getScreenshot } from '../util/refreshSavegames';
+
+// Local type definition for Dimensions (from gamebryo-savegame)
+interface Dimensions {
+  width: number;
+  height: number;
+}
 
 interface ICanvasProps {
   save: ISavegame;
@@ -67,7 +72,7 @@ class ScreenshotCanvas extends React.Component<ICanvasProps, {}> {
       .then((bitmap) => { ctx.drawImage(bitmap, 0, 0); })
       .catch(err => {
         log('warn', 'failed to read savegame screenshot',
-          { fileName: save.filePath, error: err.message });
+            { fileName: save.filePath, error: err.message });
       });
   }
 }

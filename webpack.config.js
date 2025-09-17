@@ -1,4 +1,4 @@
-let webpack = require('vortex-api/bin/webpack').default;
+const webpack = require('vortex-api/bin/webpack').default;
 
 const res = webpack('gamebryo-savegame-management', __dirname, 5);
 

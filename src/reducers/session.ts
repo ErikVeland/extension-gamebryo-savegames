@@ -13,8 +13,8 @@ export const sessionReducer: types.IReducerSpec = {
       const { savegames, truncated } = payload;
       return util.setSafe(
         util.setSafe(state,
-          ['saves'], savegames),
-          ['savesTruncated'], truncated);
+                     ['saves'], savegames),
+        ['savesTruncated'], truncated);
     },
     [actions.removeSavegame as any]: (state, payload) =>
       util.deleteOrNop(state, ['saves', payload]),
